@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZEP 학생 게시판 교사용 가이드</title>
+  <style>
+    /* 기본 설정 */
+    :root{
+      --bg:#f8f9fc;
+      --panel:#ffffff;
+      --text:#1a1a2e;
+      --text-muted:#6b7280;
+      --brand:#8b5cf6;
+      --brand-light:#a78bfa;
+      --brand-lighter:#ede9fe;
+      --brand-bg:#f5f3ff;
+      --border:#e5e7eb;
+      --radius:16px;
+      --radius-sm:8px;
+      --shadow:0 2px 8px rgba(0,0,0,.08);
+      --shadow-lg:0 4px 20px rgba(0,0,0,.12);
+      --success:#10b981;
+      --success-light:#d1fae5;
+      --warning:#f59e0b;
+      --warning-light:#fef3c7;
+      --danger:#ef4444;
+      --danger-light:#fee2e2;
+      --info:#3b82f6;
+      --info-light:#dbeafe;
+    }
+    
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+    
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font:16px/1.7 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans KR,Apple SD Gothic Neo,sans-serif;
+      padding:0;
+    }
+    
+    a{color:var(--brand);text-decoration:none;}
+    
+    /* 헤더 */
+    header{
+      background:linear-gradient(135deg, #f5f3ff, #ede9fe);
+      color:var(--text);
+      padding:60px 20px;
+      text-align:center;
+      box-shadow:var(--shadow);
+      border-bottom:1px solid var(--border);
+    }
+    
+    .logo{
+      display:flex;
+      justify-content:center;
+      margin-bottom:24px;
+    }
+    
+    .logo-icon{
+      width:80px;
+      height:80px;
+      background:white;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 4px 16px rgba(0,0,0,.1);
+      font-size:48px;
+    }
+    
+    h1{
+      margin:0;
+      font-size:42px;
+      font-weight:700;
+      letter-spacing:-0.5px;
+    }
+    
+    .subtitle{
+      margin-top:12px;
+      font-size:18px;
+      color:var(--text-muted);
+      font-weight:400;
+    }
+    
+    /* 메인 컨텐츠 */
+    main{
+      max-width:1200px;
+      margin:0 auto;
+      padding:60px 20px;
+    }
+    
+    section{
+      margin-bottom:80px;
+    }
+    
+    section:last-child{
+      margin-bottom:40px;
+    }
+    
+    h2{
+      font-size:32px;
+      font-weight:700;
+      margin-bottom:40px;
+      color:var(--brand);
+      position:relative;
+      padding-bottom:16px;
+    }
+    
+    h2::after{
+      content:'';
+      position:absolute;
+      bottom:0;
+      left:0;
+      width:60px;
+      height:4px;
+      background:linear-gradient(90deg, var(--brand), var(--brand-light));
+      border-radius:2px;
+    }
+    
+    h3{
+      font-size:20px;
+      font-weight:700;
+      margin-bottom:16px;
+      color:var(--text);
+    }
+    
+    /* 그리드 레이아웃 */
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(450px, 1fr));
+      gap:24px;
+      margin-bottom:24px;
+    }
+    
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
+      gap:24px;
+      margin-bottom:24px;
+    }
+    
+    /* 카드 */
+    .card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:28px;
+      box-shadow:var(--shadow);
+      transition:all 0.3s ease;
+      height:100%;
+    }
+    
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:var(--shadow-lg);
+    }
+    
+    /* 정보 박스 */
+    .info-box{
+      background:var(--panel);
+      border:2px solid var(--brand-lighter);
+      border-radius:var(--radius-sm);
+      padding:24px;
+      margin-bottom:24px;
+    }
+    
+    .info-box h4{
+      font-size:16px;
+      font-weight:600;
+      color:var(--brand);
+      margin-bottom:12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    
+    /* 스펙 리스트 */
+    ul.spec{
+      list-style:none;
+      margin:20px 0 0 0;
+      padding:0;
+    }
+    
+    ul.spec li{
+      display:flex;
+      gap:16px;
+      padding:14px 0;
+      border-bottom:1px solid var(--border);
+      align-items:flex-start;
+    }
+    
+    ul.spec li:last-child{
+      border-bottom:none;
+    }
+    
+    .k{
+      min-width:120px;
+      font-size:14px;
+      font-weight:600;
+      color:var(--text-muted);
+      flex-shrink:0;
+    }
+    
+    .v{
+      font-size:15px;
+      flex:1;
+      color:var(--text);
+    }
+    
+    .v code{
+      background:var(--brand-lighter);
+      color:var(--brand);
+      padding:3px 8px;
+      border-radius:4px;
+      font-size:14px;
+      font-family:'Consolas', 'Monaco', monospace;
+      font-weight:600;
+    }
+    
+    .v strong{
+      font-weight:700;
+      color:var(--brand);
+    }
+    
+    /* 배지 */
+    .badge{
+      display:inline-block;
+      padding:4px 12px;
+      border-radius:12px;
+      font-size:12px;
+      font-weight:600;
+      line-height:1.5;
+    }
+    
+    .badge.teacher{
+      background:var(--success-light);
+      color:#065f46;
+    }
+    
+    .badge.student{
+      background:var(--info-light);
+      color:#1e40af;
+    }
+    
+    .badge.premium{
+      background:var(--warning-light);
+      color:#92400e;
+    }
+    
+    /* 노트 */
+    .note{
+      background:linear-gradient(135deg, #f0f9ff, #e0f2fe);
+      border-left:4px solid #0ea5e9;
+      padding:16px;
+      border-radius:var(--radius-sm);
+      margin-top:20px;
+      font-size:14px;
+      color:#0c4a6e;
+    }
+    
+    .note.warning{
+      background:linear-gradient(135deg, #fef3c7, #fde68a);
+      border-left-color:#f59e0b;
+      color:#78350f;
+    }
+    
+    .note.success{
+      background:linear-gradient(135deg, #d1fae5, #a7f3d0);
+      border-left-color:#10b981;
+      color:#065f46;
+    }
+    
+    /* 테이블 */
+    .table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      margin-top:20px;
+      border-radius:var(--radius-sm);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    
+    .table thead th{
+      background:var(--brand-bg);
+      color:var(--brand);
+      padding:16px;
+      text-align:left;
+      font-weight:600;
+      font-size:14px;
+    }
+    
+    .table thead th:first-child{
+      text-align:center;
+      width:120px;
+    }
+    
+    .table tbody td{
+      padding:16px;
+      border-bottom:1px solid var(--border);
+      font-size:14px;
+    }
+    
+    .table tbody td:first-child{
+      text-align:center;
+      font-weight:600;
+    }
+    
+    .table tbody tr{
+      background:white;
+      transition:background 0.2s;
+    }
+    
+    .table tbody tr:hover{
+      background:var(--bg);
+    }
+    
+    .table tbody tr:last-child td{
+      border-bottom:none;
+    }
+    
+    /* 체크/크로스 아이콘 */
+    .check{
+      color:var(--success);
+      font-weight:bold;
+      font-size:18px;
+    }
+    
+    .cross{
+      color:var(--danger);
+      font-weight:bold;
+      font-size:18px;
+    }
+    
+    /* 단계별 가이드 */
+    .steps{
+      counter-reset:step;
+    }
+    
+    .step{
+      position:relative;
+      padding-left:60px;
+      margin-bottom:32px;
+    }
+    
+    .step::before{
+      counter-increment:step;
+      content:counter(step);
+      position:absolute;
+      left:0;
+      top:0;
+      width:40px;
+      height:40px;
+      background:var(--brand);
+      color:white;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:18px;
+    }
+    
+    .step h4{
+      font-size:18px;
+      font-weight:600;
+      margin-bottom:8px;
+      color:var(--text);
+    }
+    
+    .step p{
+      color:var(--text-muted);
+      line-height:1.6;
+    }
+    
+    /* Details */
+    details{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      padding:20px;
+      margin-top:20px;
+      box-shadow:var(--shadow);
+    }
+    
+    summary{
+      font-weight:600;
+      font-size:16px;
+      cursor:pointer;
+      user-select:none;
+      color:var(--brand);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    
+    summary:hover{
+      color:var(--brand-light);
+    }
+    
+    details[open] summary{
+      margin-bottom:16px;
+      padding-bottom:16px;
+      border-bottom:1px solid var(--border);
+    }
+    
+    /* 문제 상황 카드 */
+    .issue-card{
+      background:white;
+      border:2px solid var(--danger-light);
+      border-radius:var(--radius-sm);
+      padding:20px;
+      margin-bottom:16px;
+      transition:all 0.3s ease;
+    }
+    
+    .issue-card:hover{
+      border-color:var(--danger);
+      box-shadow:var(--shadow);
+    }
+    
+    .issue-card h4{
+      color:var(--danger);
+      font-size:16px;
+      font-weight:600;
+      margin-bottom:12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    
+    .issue-card .solution{
+      background:var(--bg);
+      padding:12px;
+      border-radius:6px;
+      margin-top:8px;
+      font-size:14px;
+      line-height:1.6;
+    }
+    
+    /* 유틸리티 */
+    .flex{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    
+    .text-center{
+      text-align:center;
+    }
+    
+    /* 반응형 */
+    @media (max-width:768px){
+      h1{font-size:32px;}
+      h2{font-size:26px;}
+      .grid-2, .grid-3{
+        grid-template-columns:1fr;
+      }
+      main{padding:40px 16px;}
+      header{padding:40px 16px;}
+      .k{min-width:90px;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <div class="logo-icon">
+        📖
+      </div>
+    </div>
+    <h1>ZEP 학생 게시판 교사용 가이드</h1>
+    <p class="subtitle">GuestBook Module Instructor's Guide</p>
+  </header>
+
+  <main>
+    <!-- 개요 -->
+    <section id="intro">
+      <h2>개요</h2>
+      
+      <div class="info-box">
+        <h4>📌 학생 게시판 정보</h4>
+        <ul class="spec">
+          <li><div class="k">기능명</div><div class="v">학생 게시판 (GuestBook Module)</div></li>
+          <li><div class="k">버전</div><div class="v"><code>20251028_1245</code></div></li>
+          <li><div class="k">앱 이름</div><div class="v"><code>GuestBook_School</code></div></li>
+          <li><div class="k">주요 사용자</div><div class="v">교사 (관리자), 학생 (일반 사용자)</div></li>
+        </ul>
+      </div>
+
+      <article class="card">
+        <h3>학생 게시판이란?</h3>
+        <p style="line-height:1.8;color:var(--text-muted);">
+          ZEP 메타버스 플랫폼에서 <strong>학생들과 소통하고 의견을 나누기 위한 공간</strong>을 제공하는 기능입니다. 
+          교사는 학생들의 게시물을 확인하고 승인하며, 중요한 내용은 상단에 고정할 수 있습니다. 
+          학생들은 자유롭게 글을 작성하고, 교사의 공지사항을 확인할 수 있습니다.
+        </p>
+        
+        <p class="note success" style="margin-top:20px;">
+          <strong>💡 활용 예시:</strong> 학급 의견 수렴, 현장학습 소감 공유, 온라인 수업 피드백, 자유 게시판 등
+        </p>
+      </article>
+    </section>
+
+    <!-- 핵심 기능 -->
+    <section id="features">
+      <h2>01. 핵심 기능 요약</h2>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;">
+        
+        <!-- 학생 카드 -->
+        <article style="background:white;border:2px solid #e5e7eb;border-radius:16px;padding:32px;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all 0.3s ease;position:relative;">
+          <div style="position:absolute;top:16px;right:16px;background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;">학생</div>
+          
+          <div style="margin-bottom:24px;">
+            <div style="width:48px;height:48px;background:linear-gradient(135deg,#60a5fa,#3b82f6);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;">👨‍🎓</div>
+            <h3 style="font-size:24px;font-weight:700;margin-bottom:8px;">학생 권한</h3>
+            <p style="color:#6b7280;font-size:14px;">일반 사용자 기능</p>
+          </div>
+          
+          <div style="border-top:2px solid #f3f4f6;padding-top:20px;">
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#10b981;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">게시물 작성</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">작성 후 교사 승인 필요</p>
+            </div>
+            
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#10b981;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">본인 글 삭제</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">자신이 작성한 글만 삭제 가능</p>
+            </div>
+            
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#10b981;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">공지사항 확인</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">교사가 등록한 공지 조회</p>
+            </div>
+            
+            <div style="background:#fef3c7;border-radius:8px;padding:12px;margin-top:16px;">
+              <p style="font-size:12px;color:#92400e;font-weight:600;margin-bottom:4px;">📝 작성 제한</p>
+              <ul style="margin:0;padding-left:16px;font-size:12px;color:#92400e;line-height:1.6;">
+                <li>최대 200자</li>
+                <li>60초 작성 간격</li>
+                <li>비속어 자동 차단</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+        
+        <!-- 교사 카드 (강조) -->
+        <article style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:3px solid #8b5cf6;border-radius:16px;padding:32px;box-shadow:0 4px 20px rgba(139,92,246,.2);transition:all 0.3s ease;position:relative;">
+          <div style="position:absolute;top:-12px;right:20px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:white;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;box-shadow:0 4px 12px rgba(139,92,246,.3);">✨ 관리자</div>
+          
+          <div style="margin-bottom:24px;">
+            <div style="width:48px;height:48px;background:linear-gradient(135deg,#a78bfa,#8b5cf6);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;">👨‍🏫</div>
+            <h3 style="font-size:24px;font-weight:700;margin-bottom:8px;color:#7c3aed;">교사 권한</h3>
+            <p style="color:#6b7280;font-size:14px;">모든 관리 기능 사용 가능</p>
+          </div>
+          
+          <div style="border-top:2px solid rgba(139,92,246,.2);padding-top:20px;">
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#8b5cf6;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">게시물 작성</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">즉시 승인되어 게시</p>
+            </div>
+            
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#8b5cf6;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">모든 글 관리</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">승인, 거부, 삭제 가능</p>
+            </div>
+            
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#8b5cf6;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">상단 고정</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">중요 게시물 고정 표시</p>
+            </div>
+            
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#8b5cf6;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">공지사항 관리</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">공지 작성 및 수정 (최대 80자)</p>
+            </div>
+            
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#8b5cf6;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">전체 초기화</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">모든 게시물 삭제</p>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Pro 플랜 카드 -->
+        <article style="background:white;border:2px solid #fbbf24;border-radius:16px;padding:32px;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all 0.3s ease;position:relative;">
+          <div style="position:absolute;top:16px;right:16px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:white;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;">Pro</div>
+          
+          <div style="margin-bottom:24px;">
+            <div style="width:48px;height:48px;background:linear-gradient(135deg,#fbbf24,#f59e0b);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;">👑</div>
+            <h3 style="font-size:24px;font-weight:700;margin-bottom:8px;">Pro 플랜</h3>
+            <p style="color:#6b7280;font-size:14px;">추가 기능으로 운영 강화</p>
+          </div>
+          
+          <div style="border-top:2px solid #f3f4f6;padding-top:20px;">
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#f59e0b;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">게시물 무제한</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">무료: 최대 50개 제한</p>
+            </div>
+            
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#f59e0b;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">기록 다운로드</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">CSV/Excel 형식 저장</p>
+            </div>
+            
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="color:#f59e0b;font-size:18px;font-weight:bold;">✓</span>
+                <strong style="font-size:14px;">고급 관리 기능</strong>
+              </div>
+              <p style="color:#6b7280;font-size:13px;margin-left:26px;line-height:1.5;">상세 통계 및 분석</p>
+            </div>
+            
+            <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:8px;padding:16px;margin-top:16px;text-align:center;">
+              <p style="font-size:24px;font-weight:700;color:#92400e;margin-bottom:4px;">₩7,000</p>
+              <p style="font-size:12px;color:#78350f;">월 1명 기준</p>
+            </div>
+          </div>
+        </article>
+        
+      </div>
+      
+      <div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-left:4px solid #0ea5e9;padding:20px;border-radius:12px;margin-top:32px;">
+        <p style="color:#0c4a6e;font-size:14px;line-height:1.8;margin:0;">
+          <strong>💡 참고:</strong> 교사 권한은 ZEP 맵에서 <strong>스태프(역할 2000 이상)</strong>로 설정된 사용자에게 자동으로 부여됩니다. 
+          Pro 플랜은 학교 단위 구독을 통해 더 많은 학생들과 효과적으로 소통할 수 있습니다.
+        </p>
+      </div>
+    </section>
+
+    <!-- 교사 권한 및 관리 -->
+    <section id="teacher">
+      <h2>02. 교사용 권한 및 관리 방법</h2>
+      
+      <p style="margin-bottom:32px;color:var(--text-muted);line-height:1.8;">
+        교사 계정은 <strong>스태프(ZEP 역할 2000 이상)</strong> 권한으로 분류되며, 학생 게시판의 모든 관리 기능을 사용할 수 있습니다.
+      </p>
+
+      <div class="grid-2" style="margin-bottom:40px;">
+        <article class="card">
+          <h3>📝 게시물 승인 및 삭제</h3>
+          <p style="color:var(--text-muted);margin-bottom:20px;line-height:1.6;">
+            학생이 작성한 게시물은 기본적으로 <strong>'승인 대기'</strong> 상태로 등록됩니다. 
+            부적절한 내용을 걸러내고 공개적으로 표시될 게시물만 선별하여 승인할 수 있습니다.
+          </p>
+          
+          <ul class="spec">
+            <li><div class="k">즉시 승인</div><div class="v">교사가 작성한 글은 자동으로 <strong>'승인됨'</strong> 상태로 게시됩니다.</div></li>
+            <li><div class="k">승인 대기 관리</div><div class="v">학생 작성 글은 '승인대기' 배지와 함께 표시되며, 체크 버튼을 눌러 승인할 수 있습니다.</div></li>
+            <li><div class="k">승인 취소</div><div class="v">이미 승인된 글도 다시 대기 상태로 되돌릴 수 있습니다.</div></li>
+            <li><div class="k">삭제</div><div class="v">교사는 학생 및 본인이 작성한 모든 게시물을 삭제할 수 있습니다.</div></li>
+          </ul>
+          
+          <p class="note" style="margin-top:16px;">
+            <strong>💡 Tip:</strong> 승인 대기 중인 게시물은 작성자 본인과 교사에게만 보입니다.
+          </p>
+        </article>
+        
+        <article class="card">
+          <h3>📌 공지사항 및 고정 기능</h3>
+          
+          <div class="steps">
+            <div class="step">
+              <h4>공지사항 작성하기</h4>
+              <p>위젯 상단의 톱니바퀴(⚙️) 아이콘 → '학생 게시판 설정' 패널 → '전체 공지' 섹션에서 내용 작성 후 저장</p>
+            </div>
+            
+            <div class="step">
+              <h4>게시물 고정하기</h4>
+              <p>중요한 게시물의 '고정' 버튼을 클릭하면 목록 최상단에 항상 표시됩니다. '고정됨' 배지와 핀 아이콘(📌)이 표시됩니다.</p>
+            </div>
+          </div>
+          
+          <ul class="spec" style="margin-top:20px;">
+            <li><div class="k">공지사항 제한</div><div class="v">최대 <strong>80자</strong>까지 작성 가능</div></li>
+            <li><div class="k">노출 범위</div><div class="v">모든 사용자에게 상단에 표시</div></li>
+            <li><div class="k">고정 개수</div><div class="v">제한 없음</div></li>
+          </ul>
+        </article>
+      </div>
+
+      <article class="card">
+        <div class="flex" style="margin-bottom:20px;">
+          <h3>⚙️ 고급 설정 및 데이터 관리</h3>
+          <span class="badge premium">Pro 플랜 전용</span>
+        </div>
+        
+        <p style="color:var(--text-muted);margin-bottom:20px;line-height:1.6;">
+          학생 게시판 설정 패널의 <strong>'고급 설정'</strong> 섹션은 Pro 플랜 구독 시 활성화됩니다.
+        </p>
+        
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:180px;">기능</th>
+              <th>설명</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>게시물 수 무제한</strong></td>
+              <td>Pro 플랜 구독 시 게시물 수 제한(50개)이 해제되어 <strong>무제한</strong>으로 작성할 수 있습니다.</td>
+            </tr>
+            <tr>
+              <td><strong>게시물 기록 다운로드</strong></td>
+              <td>CSV/Excel 파일로 모든 학생 게시판 내역(작성자 이름, 내용, 작성 시간)을 다운로드하여 학생 활동 기록을 보관할 수 있습니다.</td>
+            </tr>
+            <tr>
+              <td><strong>학생 게시판 전체 초기화</strong></td>
+              <td>모든 게시물을 영구 삭제하고 초기 상태로 되돌립니다. <strong style="color:var(--danger);">신중하게 사용</strong>해야 합니다.</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <p class="note warning">
+          <strong>⚠️ 주의:</strong> 전체 초기화는 되돌릴 수 없으므로, 반드시 기록 다운로드 후 실행하시기 바랍니다.
+        </p>
+      </article>
+    </section>
+
+    <!-- 학생 사용 방법 -->
+    <section id="student">
+      <h2>03. 학생 사용 방법 및 제한 사항</h2>
+      
+      <p style="margin-bottom:32px;color:var(--text-muted);line-height:1.8;">
+        학생 계정은 안전하고 건전한 소통 환경을 위해 몇 가지 제한이 적용됩니다.
+      </p>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3>✍️ 작성 제한 사항</h3>
+          
+          <ul class="spec">
+            <li>
+              <div class="k">글자 수</div>
+              <div class="v">한 게시물당 최대 <strong>200자</strong>로 제한됩니다.</div>
+            </li>
+            <li>
+              <div class="k">작성 간격</div>
+              <div class="v">게시물 작성 후 <strong>60초</strong> 동안은 다시 작성할 수 없습니다. (도배 방지)</div>
+            </li>
+            <li>
+              <div class="k">비속어 필터</div>
+              <div class="v">시스템에 내장된 비속어 목록을 기반으로 자동 필터링되며, 비속어 포함 시 작성이 차단됩니다.</div>
+            </li>
+            <li>
+              <div class="k">게시물 수</div>
+              <div class="v">무료 플랜: 총 게시물 수가 <strong>50개</strong>를 초과하면 더 이상 작성할 수 없습니다.</div>
+            </li>
+          </ul>
+          
+          <p class="note warning">
+            <strong>💡 안내:</strong> Pro 플랜 구독 시 게시물 수 제한이 해제됩니다.
+          </p>
+        </article>
+        
+        <article class="card">
+          <h3>✅ 승인 시스템 이해하기</h3>
+          
+          <p style="color:var(--text-muted);margin-bottom:20px;line-height:1.6;">
+            학생이 작성한 게시물은 즉시 모든 사용자에게 공개되지 않고, <strong>'승인 대기'</strong> 상태로 등록됩니다.
+          </p>
+          
+          <div class="steps">
+            <div class="step">
+              <h4>작성 완료</h4>
+              <p>게시물을 작성하면 '승인대기' 상태로 저장됩니다.</p>
+            </div>
+            
+            <div class="step">
+              <h4>확인 가능</h4>
+              <p>작성자 본인과 교사만 승인 대기 중인 게시물을 확인할 수 있습니다.</p>
+            </div>
+            
+            <div class="step">
+              <h4>승인 후 공개</h4>
+              <p>교사가 승인하면 모든 사용자에게 공개됩니다.</p>
+            </div>
+          </div>
+          
+          <p class="note success">
+            <strong>💡 Tip:</strong> 건전한 내용으로 작성하면 빠르게 승인됩니다!
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 문제 상황 대응 -->
+    <section id="troubleshooting">
+      <h2>04. 문제 상황 및 해결 방법</h2>
+      
+      <p style="margin-bottom:32px;color:var(--text-muted);line-height:1.8;">
+        학생 게시판 모듈 사용 중 발생할 수 있는 주요 문제 상황과 해결 방법을 안내합니다.
+      </p>
+
+      <div class="issue-card">
+        <h4>❌ 게시물이 작성되지 않아요</h4>
+        <div class="solution">
+          <strong>가능한 원인 및 해결 방법:</strong>
+          <ul style="margin:8px 0 0 20px;line-height:1.8;">
+            <li><strong>60초 작성 간격:</strong> 이전 게시물 작성 후 60초가 지나지 않았을 수 있습니다. 잠시 기다린 후 다시 시도해주세요.</li>
+            <li><strong>비속어 포함:</strong> 작성 내용에 부적절한 표현이 포함되어 자동으로 차단되었을 수 있습니다. 내용을 수정한 후 다시 작성해주세요.</li>
+            <li><strong>게시물 수 초과:</strong> 무료 플랜의 최대 게시물 수(50개)를 초과했을 수 있습니다. 불필요한 게시물을 삭제하거나 Pro 플랜을 구독하세요.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="issue-card">
+        <h4>👁️ 학생이 작성한 글이 보이지 않아요</h4>
+        <div class="solution">
+          <strong>해결 방법:</strong>
+          <ul style="margin:8px 0 0 20px;line-height:1.8;">
+            <li>학생이 작성한 게시물은 기본적으로 <strong>'승인 대기'</strong> 상태입니다.</li>
+            <li>교사가 직접 승인해야 모든 사용자에게 공개됩니다.</li>
+            <li>학생 게시판 목록에서 '승인대기' 배지가 있는 게시물을 찾아 승인 버튼을 눌러주세요.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="issue-card">
+        <h4>🔧 학생 게시판 위젯이 열리지 않아요</h4>
+        <div class="solution">
+          <strong>해결 방법:</strong>
+          <ul style="margin:8px 0 0 20px;line-height:1.8;">
+            <li>ZEP 환경을 새로고침한 후 다시 시도해주세요.</li>
+            <li>브라우저 캐시를 삭제하고 재접속해주세요.</li>
+            <li>문제가 지속되면 ZEP 고객지원센터(support@zep.us)로 문의해주세요.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="issue-card">
+        <h4>📱 모바일에서 작동이 원활하지 않아요</h4>
+        <div class="solution">
+          <strong>해결 방법:</strong>
+          <ul style="margin:8px 0 0 20px;line-height:1.8;">
+            <li>최신 버전의 ZEP 앱을 사용하고 있는지 확인해주세요.</li>
+            <li>백그라운드에서 실행 중인 다른 앱을 종료하여 메모리를 확보해주세요.</li>
+            <li>가능하면 PC 환경에서 사용하는 것을 권장합니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <article class="card" style="margin-top:24px;">
+        <h3>🔍 버전 확인 방법</h3>
+        <p style="color:var(--text-muted);margin-bottom:16px;line-height:1.6;">
+          현재 사용 중인 학생 게시판 모듈의 버전을 확인할 수 있습니다.
+        </p>
+        
+        <div style="background:var(--bg);padding:16px;border-radius:var(--radius-sm);border:1px dashed var(--border);">
+          <p style="margin-bottom:8px;font-weight:600;">ZEP 내 채팅창에 다음 명령어를 입력하세요:</p>
+          <code style="background:var(--panel);padding:8px 12px;border-radius:4px;display:inline-block;font-size:14px;border:1px solid var(--border);">!zep_app_version_check</code>
+          <p style="margin-top:12px;font-size:14px;color:var(--text-muted);">
+            입력 후 현재 모듈 버전이 메시지로 표시됩니다.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- 활용 팁 -->
+    <section id="tips">
+      <h2>05. 교육 현장 활용 팁</h2>
+      
+      <div class="grid-3">
+        <article class="card">
+          <h3>💬 학급 의견 수렴</h3>
+          <p style="color:var(--text-muted);line-height:1.6;margin-bottom:16px;">
+            학급 활동이나 행사에 대한 학생들의 의견을 자유롭게 받아보세요.
+          </p>
+          <p class="note">
+            <strong>예시:</strong> "다음 주 현장학습 장소로 가고 싶은 곳을 학생 게시판에 남겨주세요!"
+          </p>
+        </article>
+        
+        <article class="card">
+          <h3>📝 수업 피드백</h3>
+          <p style="color:var(--text-muted);line-height:1.6;margin-bottom:16px;">
+            온라인/오프라인 수업 후 학생들의 소감이나 질문을 받을 수 있습니다.
+          </p>
+          <p class="note success">
+            <strong>예시:</strong> "오늘 배운 내용 중 궁금한 점이 있다면 남겨주세요."
+          </p>
+        </article>
+        
+        <article class="card">
+          <h3>🎉 칭찬 릴레이</h3>
+          <p style="color:var(--text-muted);line-height:1.6;margin-bottom:16px;">
+            친구에게 칭찬이나 감사의 말을 전하는 긍정적인 소통 공간으로 활용하세요.
+          </p>
+          <p class="note warning">
+            <strong>예시:</strong> "오늘 도움을 준 친구에게 고마움을 전해보세요!"
+          </p>
+        </article>
+        
+        <article class="card">
+          <h3>📚 독서 감상문</h3>
+          <p style="color:var(--text-muted);line-height:1.6;margin-bottom:16px;">
+            책을 읽고 간단한 감상을 공유하는 독서 커뮤니티로 활용할 수 있습니다.
+          </p>
+          <p class="note">
+            <strong>예시:</strong> "이번 주에 읽은 책의 인상 깊은 구절을 공유해주세요."
+          </p>
+        </article>
+        
+        <article class="card">
+          <h3>🎯 다짐 및 목표</h3>
+          <p style="color:var(--text-muted);line-height:1.6;margin-bottom:16px;">
+            학기 초 또는 시험 기간에 학생들의 목표와 다짐을 받아보세요.
+          </p>
+          <p class="note success">
+            <strong>예시:</strong> "2학기 목표를 학생 게시판에 적어보세요!"
+          </p>
+        </article>
+        
+        <article class="card">
+          <h3>🔔 출결 확인</h3>
+          <p style="color:var(--text-muted);line-height:1.6;margin-bottom:16px;">
+            온라인 수업 시 출석 확인용으로 간단히 활용할 수 있습니다.
+          </p>
+          <p class="note warning">
+            <strong>예시:</strong> "오늘 수업 참여 확인을 위해 '출석'이라고 남겨주세요."
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 문의 -->
+    <section id="contact">
+      <article class="card" style="text-align:center;padding:40px;">
+        <h3 style="margin-bottom:20px;">추가 문의 사항</h3>
+        <p style="color:var(--text-muted);line-height:1.8;margin-bottom:24px;">
+          학생 게시판 모듈 사용 중 궁금한 점이나 기술적인 문제가 있으시면<br>
+          ZEP 고객지원센터로 문의해주시기 바랍니다.
+        </p>
+        <div style="background:var(--bg);padding:20px;border-radius:var(--radius-sm);display:inline-block;">
+          <p style="font-weight:600;margin-bottom:8px;">ZEP 고객지원센터</p>
+          <p style="color:var(--brand);font-size:18px;font-weight:600;">support@zep.us</p>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
